@@ -2,6 +2,8 @@
 
 Advanced Combat Tracker (ACT) plugin for Text-to-Speech (TTS) with multiple output options including VOICEVOX support.
 
+<img width="620" height="476" alt="image" src="https://github.com/user-attachments/assets/d9aa3e93-1007-48b7-a1c8-4be0d5173699" />
+
 [日本語版はこちら](#日本語)
 
 ## Features
