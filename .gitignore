@@ -1,0 +1,32 @@
+# Build outputs
+*.dll
+*.exe
+*.pdb
+
+# Configuration files
+*.xml
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# NuGet Packages
+packages/
+*.nupkg
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Backup files
+*.bak
+*~
+
+# ACT
+Advanced Combat Tracker.exe
