@@ -28,6 +28,13 @@ This plugin replaces ACT's default TTS functionality with three selectable modes
   - **Concurrent**: Play multiple messages simultaneously
   - **Queue**: Queue up to 4 messages for sequential playback
 
+### 4. Parentheses Filter (ON/OFF toggle)
+- Automatically removes text enclosed in parentheses before TTS
+- Supports both half-width `()` and full-width `（）` brackets
+- Handles mixed bracket combinations: `（text)` or `(text）`
+- Useful for filtering out role-play actions or meta-text from chat messages
+- Toggle ON/OFF with the checkbox in the plugin settings
+
 ## Requirements
 
 - **Advanced Combat Tracker** (ACT)
@@ -62,6 +69,12 @@ This plugin replaces ACT's default TTS functionality with three selectable modes
 5. Select audio output device
 6. Choose playback mode (Concurrent or Queue)
 7. Click **Test** to verify
+
+### Parentheses Filter
+1. Enable the **Remove Parentheses** checkbox to turn ON
+2. The filter will automatically remove all text within parentheses before playing TTS
+3. Disable the checkbox to turn OFF
+4. Settings are automatically saved
 
 ## Building from Source
 
@@ -133,6 +146,13 @@ ACT のデフォルト TTS 機能を置き換え、3つの読み上げモード�
   - **Concurrent（同時再生）**: 複数のメッセージを同時に再生
   - **Queue（キュー）**: 最大4つのメッセージを順次再生
 
+### 4. 括弧フィルター（ON/OFF 切り替え）
+- TTS 前に括弧で囲まれたテキストを自動削除
+- 半角 `()` と全角 `（）` の両方に対応
+- 混合括弧にも対応: `（text)` や `(text）` など
+- ロールプレイのアクションや、チャットのメタテキストを除外するのに便利
+- プラグイン設定のチェックボックスで ON/OFF を切り替え
+
 ## 必要要件
 
 - **Advanced Combat Tracker** (ACT) — `Advanced Combat Tracker.exe` は同梱・配布しません。公式サイトから各自取得して手元に保管してください。
@@ -167,6 +187,17 @@ ACT のデフォルト TTS 機能を置き換え、3つの読み上げモード�
 5. オーディオ出力デバイスを選択
 6. 再生モード（Concurrent または Queue）を選択
 7. **Test** ボタンで動作確認
+
+### 括弧フィルター
+1. **Remove Parentheses** チェックボックスをチェックして ON にする
+2. TTS 再生前に括弧内のテキストが自動削除される
+3. チェックボックスを外して OFF にする
+4. 設定は自動的に保存される
+
+#### 使用例
+- 入力: `敵を倒した（ボス戦です）` → TTS: `敵を倒した`
+- 入力: `説明(これはアクション)です` → TTS: `説明`
+- 入力: `情報（これは注釈)です` → TTS: `情報`
 
 ## ソースからのビルド
 

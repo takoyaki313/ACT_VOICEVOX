@@ -29,6 +29,7 @@ namespace ACT_Plugin
         private string configVoicevoxSpeakerName = "四国めたん（ノーマル）";
         private double configVoicevoxSpeed = 1.0;
         private double configVoicevoxVolume = 1.0;
+        private bool configRemoveParentheses = false;
         private TextBox txtLog;
         private SpeechSynthesizer synthesizer;
         private Thread playbackWorker;
@@ -136,7 +137,8 @@ namespace ACT_Plugin
                         PlaybackMode = this.configPlaybackMode, 
                         VoicevoxSpeakerName = this.configVoicevoxSpeakerName, 
                         VoicevoxSpeed = this.configVoicevoxSpeed, 
-                        VoicevoxVolume = this.configVoicevoxVolume 
+                        VoicevoxVolume = this.configVoicevoxVolume,
+                        RemoveParentheses = this.configRemoveParentheses
                     };
                     serializer.Serialize(writer, config);
                 }
@@ -166,6 +168,7 @@ namespace ACT_Plugin
                         this.configVoicevoxSpeakerName = config.VoicevoxSpeakerName;
                         this.configVoicevoxSpeed = config.VoicevoxSpeed > 0 ? config.VoicevoxSpeed : 1.0;
                         this.configVoicevoxVolume = config.VoicevoxVolume > 0 ? config.VoicevoxVolume : 1.0;
+                        this.configRemoveParentheses = config.RemoveParentheses;
                     }
                 }
             }
@@ -177,6 +180,12 @@ namespace ACT_Plugin
 
         public void newTTS(string sMessage)
         {
+            // 括弧フィルターが有効な場合は括弧内テキストを除去
+            if (this.configRemoveParentheses)
+            {
+                sMessage = RemoveParenthesesContent(sMessage);
+            }
+
             if (this.configMode == 2 && this.configPlaybackMode == 1)
             {
                 EnqueuePlayback(sMessage);
@@ -186,6 +195,14 @@ namespace ACT_Plugin
             if (this.configMode == 0) SendViaTCP(sMessage);
             else if (this.configMode == 1) SendViaSAPI(sMessage);
             else if (this.configMode == 2) RunBackground(() => SendViaVOICEVOX(sMessage));
+        }
+
+        private string RemoveParenthesesContent(string text)
+        {
+            // 半角と全角の括弧の組み合わせに対応
+            // （内容）、(内容)、（内容)、(内容） のすべてのパターンに対応
+            text = Regex.Replace(text, "[（(][^）)]*[）)]", "");
+            return text.Trim();
         }
 
         private void SendViaTCP(string sMessage)
@@ -596,6 +613,22 @@ namespace ACT_Plugin
                 SaveConfig();
             };
 
+            Label lblRemoveParentheses = new Label();
+            lblRemoveParentheses.Text = "Remove Parentheses:";
+            lblRemoveParentheses.Location = new System.Drawing.Point(10, 220);
+            lblRemoveParentheses.AutoSize = true;
+
+            CheckBox chkRemoveParentheses = new CheckBox();
+            chkRemoveParentheses.Text = "ON";
+            chkRemoveParentheses.Location = new System.Drawing.Point(200, 220);
+            chkRemoveParentheses.Checked = this.configRemoveParentheses;
+            chkRemoveParentheses.AutoSize = true;
+            chkRemoveParentheses.CheckedChanged += (s, e) =>
+            {
+                this.configRemoveParentheses = chkRemoveParentheses.Checked;
+                SaveConfig();
+            };
+
             Button btnTest = new Button();
             btnTest.Text = "Test";
             btnTest.Location = new System.Drawing.Point(10, 265);
@@ -740,6 +773,8 @@ namespace ACT_Plugin
             pluginScreenSpace.Controls.Add(lblVoicevoxVolumeValue);
             pluginScreenSpace.Controls.Add(lblAudioOut);
             pluginScreenSpace.Controls.Add(cmbAudioOut);
+            pluginScreenSpace.Controls.Add(lblRemoveParentheses);
+            pluginScreenSpace.Controls.Add(chkRemoveParentheses);
             pluginScreenSpace.Controls.Add(btnTest);
             pluginScreenSpace.Controls.Add(lblLog);
             pluginScreenSpace.Controls.Add(txtLog);
@@ -1024,5 +1059,8 @@ namespace ACT_Plugin
 
         [XmlElement("VoicevoxVolume")]
         public double VoicevoxVolume { get; set; }
+
+        [XmlElement("RemoveParentheses")]
+        public bool RemoveParentheses { get; set; }
     }
 }
